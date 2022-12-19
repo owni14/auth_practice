@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { useState, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 
 // Css Styling
 const LoginLayout = styled.div`
@@ -72,9 +72,13 @@ const ChangeButton = styled.button`
 `;
 
 const Login = () => {
-  const [authTitle, setAuthTitle] = useState('Login');
-  const [buttonTitle, setButtonTitle] = useState('Login');
-  const [ChgButtonTitle, setChgButtonTitle] = useState('Create new account');
+  const [authTitle, setAuthTitle] = useState<string>('Login');
+  const [buttonTitle, setButtonTitle] = useState<string>('Login');
+  const [ChgButtonTitle, setChgButtonTitle] =
+    useState<string>('Create new account');
+
+  const emailInputRef = useRef<HTMLInputElement>(null);
+  const passwordInputRef = useRef<HTMLInputElement>(null);
 
   const changeButtonHandler = () => {
     if (authTitle === 'Login') {
@@ -88,15 +92,24 @@ const Login = () => {
     }
   };
 
+  const authHandler = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const enteredEmail = emailInputRef.current?.value;
+    const enteredPassword = passwordInputRef.current?.value;
+
+    console.log('email:: ', enteredEmail);
+    console.log('password:: ', enteredPassword);
+  };
+
   return (
     <LoginLayout>
       <LoginBox>
         <LoginTitle>{authTitle}</LoginTitle>
-        <LoginForm>
+        <LoginForm onSubmit={authHandler}>
           <EmailText>Your Email</EmailText>
-          <EmailInput />
+          <EmailInput required type='email' ref={emailInputRef} />
           <PasswordText>Your Password</PasswordText>
-          <PasswordInput />
+          <PasswordInput required type='password' ref={passwordInputRef} />
           <ButtonBox>
             <LoginButton>{buttonTitle}</LoginButton>
           </ButtonBox>

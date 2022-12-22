@@ -1,7 +1,10 @@
 import styled from 'styled-components';
 import React, { useState, useRef } from 'react';
+import axios, { AxiosError, AxiosResponse } from 'axios';
+import { useRouter } from 'next/router';
+import { collapseTextChangeRangesAcrossMultipleVersions } from 'typescript';
 
-// Css Styling
+// === Css Styling ===
 const LoginLayout = styled.div`
   margin: 2rem 15rem;
 `;
@@ -70,8 +73,10 @@ const ChangeButton = styled.button`
     color: #ab73d0;
   }
 `;
+// ===================
 
 const Login = () => {
+  const route = useRouter();
   const [isNewMemeber, setIsNewMember] = useState(false);
   const [authTitle, setAuthTitle] = useState<string>('Login');
   const [buttonTitle, setButtonTitle] = useState<string>('Login');
@@ -99,8 +104,45 @@ const Login = () => {
     const enteredEmail = emailInputRef.current?.value;
     const enteredPassword = passwordInputRef.current?.value;
 
-    console.log('email:: ', enteredEmail);
-    console.log('password:: ', enteredPassword);
+    if (isNewMemeber) {
+      axios({
+        url: 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCM615Zd_s9FKwYF9_j-SLmRBaD_8pfCJM',
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        data: {
+          email: enteredEmail,
+          password: enteredPassword,
+          returnSecureToken: true,
+        },
+      })
+        .then((res: AxiosResponse) => {
+          route.push('/');
+        })
+        .catch((err: AxiosError) => {
+          console.log(err);
+        });
+    } else {
+      axios({
+        url: 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCM615Zd_s9FKwYF9_j-SLmRBaD_8pfCJM',
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        data: {
+          email: enteredEmail,
+          password: enteredPassword,
+          returnSecureToken: true,
+        },
+      })
+        .then((res: AxiosResponse) => {
+          route.push('/');
+        })
+        .catch((err: AxiosError) => {
+          console.log(err);
+        });
+    }
   };
 
   return (

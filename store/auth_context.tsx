@@ -1,21 +1,21 @@
-import React, { createContext, useState } from 'react';
-import { Props } from '../types';
+import React, { createContext, useState } from "react";
+import { Props } from "../types";
 
 const AuthContext = React.createContext({
-  token: '',
+  token: "",
   isLoggedIn: false,
   login: (token) => {},
   logout: () => {},
 });
 
 export const AuthContextProvider = (props: Props) => {
-  const [token, setToken] = useState('');
+  const [token, setToken] = useState("");
 
   const userIsLoggedIn = !!token;
 
   const loginHandler = (token: string) => {
     setToken(token);
-    localStorage.setItem('token', token);
+    localStorage.setItem("token", token);
   };
 
   const logoutHandler = () => {};
@@ -26,6 +26,7 @@ export const AuthContextProvider = (props: Props) => {
     login: loginHandler,
     logout: logoutHandler,
   };
+
   return (
     <AuthContext.Provider value={contextValue}>
       {props.children}

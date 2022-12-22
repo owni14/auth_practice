@@ -1,6 +1,8 @@
-import Link from 'next/link';
-import React from 'react';
-import styled from 'styled-components';
+import Link from "next/link";
+import React from "react";
+import styled from "styled-components";
+import { useContext } from "react";
+import AuthContext from "../../store/auth_context";
 
 // Css Styling
 const NavBar = styled.nav`
@@ -71,8 +73,10 @@ const LogoutLink = styled.li`
 
 // HeaderBar.tsx
 const HeaderBar = () => {
+  const { isLoggedIn } = useContext(AuthContext);
+
   const logoutHandler = () => {
-    console.log('logout Check!!');
+    console.log("logout Check!!");
   };
 
   return (
@@ -80,20 +84,23 @@ const HeaderBar = () => {
       <NavBar>
         <MainPageList>
           <MainPageLink>
-            <Link href='/'>React Auth</Link>
+            <Link href="/">React Auth</Link>
           </MainPageLink>
         </MainPageList>
-        <LoginStateList>
-          <ProfilePageLink>
-            <Link href='/profile'>Profile</Link>
-          </ProfilePageLink>
-          <LogoutLink onClick={logoutHandler}>Logout</LogoutLink>
-        </LoginStateList>
-        <LoginPageList>
-          <LoginPageLink>
-            <Link href='/auth'>Login</Link>
-          </LoginPageLink>
-        </LoginPageList>
+        {isLoggedIn ? (
+          <LoginStateList>
+            <ProfilePageLink>
+              <Link href="/profile">Profile</Link>
+            </ProfilePageLink>
+            <LogoutLink onClick={logoutHandler}>Logout</LogoutLink>
+          </LoginStateList>
+        ) : (
+          <LoginPageList>
+            <LoginPageLink>
+              <Link href="/auth">Login</Link>
+            </LoginPageLink>
+          </LoginPageList>
+        )}
       </NavBar>
     </>
   );

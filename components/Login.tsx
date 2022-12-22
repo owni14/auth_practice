@@ -8,7 +8,7 @@ const LoginLayout = styled.div`
 
 const LoginBox = styled.div`
   background-color: #38015c;
-  border-radius: 5px;
+  border-radius: 20px;
   text-align: center;
 `;
 
@@ -72,6 +72,7 @@ const ChangeButton = styled.button`
 `;
 
 const Login = () => {
+  const [isNewMemeber, setIsNewMember] = useState(false);
   const [authTitle, setAuthTitle] = useState<string>('Login');
   const [buttonTitle, setButtonTitle] = useState<string>('Login');
   const [ChgButtonTitle, setChgButtonTitle] =
@@ -81,15 +82,16 @@ const Login = () => {
   const passwordInputRef = useRef<HTMLInputElement>(null);
 
   const changeButtonHandler = () => {
-    if (authTitle === 'Login') {
-      setAuthTitle('Sign Up');
-      setButtonTitle('Create Account');
-      setChgButtonTitle('Login with existing account');
-    } else {
-      setAuthTitle('Login');
-      setButtonTitle('Login');
-      setChgButtonTitle('Create new account');
-    }
+    setIsNewMember(!isNewMemeber);
+    // if (authTitle === 'Login') {
+    //   // setAuthTitle('Sign Up');
+    //   setButtonTitle('Create Account');
+    //   setChgButtonTitle('Login with existing account');
+    // } else {
+    //   setAuthTitle('Login');
+    //   setButtonTitle('Login');
+    //   setChgButtonTitle('Create new account');
+    // }
   };
 
   const authHandler = (e: React.FormEvent<HTMLFormElement>) => {
@@ -104,19 +106,23 @@ const Login = () => {
   return (
     <LoginLayout>
       <LoginBox>
-        <LoginTitle>{authTitle}</LoginTitle>
+        <LoginTitle>{isNewMemeber ? 'Sign Up' : 'Login'}</LoginTitle>
         <LoginForm onSubmit={authHandler}>
           <EmailText>Your Email</EmailText>
           <EmailInput required type='email' ref={emailInputRef} />
           <PasswordText>Your Password</PasswordText>
           <PasswordInput required type='password' ref={passwordInputRef} />
           <ButtonBox>
-            <LoginButton>{buttonTitle}</LoginButton>
+            <LoginButton>
+              {isNewMemeber ? 'Create Account' : 'Login'}
+            </LoginButton>
           </ButtonBox>
         </LoginForm>
         <ButtonBox>
           <ChangeButton onClick={changeButtonHandler}>
-            {ChgButtonTitle}
+            {isNewMemeber
+              ? 'Login with existing account'
+              : 'Create new account'}
           </ChangeButton>
         </ButtonBox>
       </LoginBox>

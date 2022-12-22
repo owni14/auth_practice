@@ -1,5 +1,5 @@
-import styled from 'styled-components';
-import { useRef } from 'react';
+import styled from "styled-components";
+import { useRef } from "react";
 
 // Css Styling
 const ProfileBox = styled.div`
@@ -43,7 +43,7 @@ const Profile = () => {
 
   const chgPasswordHandler = () => {
     const enteredPassword = passwordInpufRef.current?.value;
-    console.log('password:: ', enteredPassword);
+    console.log("password:: ", enteredPassword);
   };
 
   return (
@@ -52,7 +52,7 @@ const Profile = () => {
       <ChgPasswordBox>
         New Password
         <InputBox>
-          <PasswordInput required type='password' ref={passwordInpufRef} />
+          <PasswordInput required type="password" ref={passwordInpufRef} />
         </InputBox>
         <ChgPasswordButton onClick={chgPasswordHandler}>
           Change Password

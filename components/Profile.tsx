@@ -1,5 +1,7 @@
-import styled from "styled-components";
-import { useRef } from "react";
+import styled from 'styled-components';
+import { useContext, useRef } from 'react';
+import axios from 'axios';
+import { useRouter } from 'next/router';
 
 // Css Styling
 const ProfileBox = styled.div`
@@ -40,10 +42,25 @@ const ChgPasswordButton = styled.button`
 
 const Profile = () => {
   const passwordInpufRef = useRef<HTMLInputElement>(null);
+  const route = useRouter();
 
   const chgPasswordHandler = () => {
     const enteredPassword = passwordInpufRef.current?.value;
-    console.log("password:: ", enteredPassword);
+    const token = localStorage.getItem('token');
+    axios({
+      url: 'https://identitytoolkit.googleapis.com/v1/accounts:update?key=AIzaSyAArsm7JmHerjVrPuGwL2GH5Sz3-0emI8g',
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      data: {
+        idToken: token,
+        password: enteredPassword,
+        returnSecureToken: true,
+      },
+    }).then((res) => {
+      route.push('/');
+    });
   };
 
   return (
@@ -52,7 +69,7 @@ const Profile = () => {
       <ChgPasswordBox>
         New Password
         <InputBox>
-          <PasswordInput required type="password" ref={passwordInpufRef} />
+          <PasswordInput required type='password' ref={passwordInpufRef} />
         </InputBox>
         <ChgPasswordButton onClick={chgPasswordHandler}>
           Change Password

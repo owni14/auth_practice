@@ -1,8 +1,13 @@
 import styled from 'styled-components';
-import React, { useState, useRef } from 'react';
-import axios, { AxiosError, AxiosResponse } from 'axios';
+import React, { useState, useRef, useContext } from 'react';
+import axios, {
+  AxiosDefaults,
+  AxiosError,
+  AxiosPromise,
+  AxiosResponse,
+} from 'axios';
 import { useRouter } from 'next/router';
-import { collapseTextChangeRangesAcrossMultipleVersions } from 'typescript';
+import AuthContext from '../store/auth_context';
 
 // === Css Styling ===
 const LoginLayout = styled.div`
@@ -76,6 +81,7 @@ const ChangeButton = styled.button`
 // ===================
 
 const Login = () => {
+  const authCtx = useContext(AuthContext);
   const route = useRouter();
   const [isNewMemeber, setIsNewMember] = useState(false);
   const [authTitle, setAuthTitle] = useState<string>('Login');
@@ -103,10 +109,11 @@ const Login = () => {
     e.preventDefault();
     const enteredEmail = emailInputRef.current?.value;
     const enteredPassword = passwordInputRef.current?.value;
+    let errorMessage = 'Authentication failed!';
 
     if (isNewMemeber) {
       axios({
-        url: 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCM615Zd_s9FKwYF9_j-SLmRBaD_8pfCJM',
+        url: 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyAArsm7JmHerjVrPuGwL2GH5Sz3-0emI8g',
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -118,14 +125,17 @@ const Login = () => {
         },
       })
         .then((res: AxiosResponse) => {
+          const token = res.data.idToken;
+          authCtx.login(token);
           route.push('/');
         })
-        .catch((err: AxiosError) => {
-          console.log(err);
+        .catch((err) => {
+          errorMessage = err.response?.data.error.message;
+          alert(errorMessage);
         });
     } else {
       axios({
-        url: 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCM615Zd_s9FKwYF9_j-SLmRBaD_8pfCJM',
+        url: 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyAArsm7JmHerjVrPuGwL2GH5Sz3-0emI8g',
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -137,10 +147,13 @@ const Login = () => {
         },
       })
         .then((res: AxiosResponse) => {
+          const token = res.data.idToken;
+          authCtx.login(token);
           route.push('/');
         })
-        .catch((err: AxiosError) => {
-          console.log(err);
+        .catch((err) => {
+          errorMessage = err.response?.data.error.message;
+          alert(errorMessage);
         });
     }
   };

@@ -7,13 +7,13 @@ import { AuthContextProvider } from '../store/auth_context';
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <Layout>
-      <AuthContextProvider>
+    <AuthContextProvider>
+      <Layout>
         <ThemeProvider theme={theme}>
           <GlobalStyle />
           <Component {...pageProps} />
         </ThemeProvider>
-      </AuthContextProvider>
-    </Layout>
+      </Layout>
+    </AuthContextProvider>
   );
 }

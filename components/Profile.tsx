@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { useContext, useRef } from 'react';
+import { useContext, useRef, useEffect } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 
@@ -43,6 +43,7 @@ const ChgPasswordButton = styled.button`
 const Profile = () => {
   const passwordInpufRef = useRef<HTMLInputElement>(null);
   const route = useRouter();
+  const token = localStorage.getItem('token');
 
   const chgPasswordHandler = () => {
     const enteredPassword = passwordInpufRef.current?.value;
@@ -62,6 +63,12 @@ const Profile = () => {
       route.push('/');
     });
   };
+
+  useEffect(() => {
+    if (token === null) {
+      route.replace('/');
+    }
+  }, [token]);
 
   return (
     <ProfileBox>

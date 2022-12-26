@@ -148,7 +148,10 @@ const Login = () => {
       })
         .then((res: AxiosResponse) => {
           const token = res.data.idToken;
-          authCtx.login(token);
+          const expirationTime = new Date(
+            new Date().getTime() + res.data.expiresIn * 1000
+          );
+          authCtx.login(token, expirationTime);
           route.push('/');
         })
         .catch((err) => {

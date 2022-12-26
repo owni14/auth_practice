@@ -9,9 +9,9 @@ const ProfilePage = () => {
 
   useEffect(() => {
     if (!isLoggedIn) {
-      route.push('/');
+      route.replace('/');
     }
-  }, [isLoggedIn]);
+  }, []);
 
   return (
     <>
